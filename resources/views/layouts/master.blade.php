@@ -55,94 +55,50 @@
             <th>Gaminys</th>
             <th>Atlikti</th>
             <th>Komentaras</th>
-            <th>Priimtas</th>
+            <th>Priimtas&nbsp;&nbsp;</th>
             <th>Atiduotas</th>
             <th>Kaina</th>
             <th>Būsena</th>
             <th>Change</th>
           </thead>
           <tbody>
+            @foreach ($customers as $customer)
             <tr>
-              <td>'Lakstingalu slenis'</td>
-              <td>865512345</td>
-              <td>Laptopas, Dell X531-C</td>
-              <td>Sugadinti diska</td>
-              <td>Per daug geras</td>
-              <td>2020-06-09</td>
-              <td>2020-06-12</td>
-              <td>20.00</td>
+              <td>{{ $customer->name }}</td>
+              <td>{{ $customer->tel_num }}</td>
+              <td>{{ $customer->model }}</td>
+              <td>{{ $customer->todo }}</td>
+              <td>{{ $customer->comment }}</td>
+              <td>{{ date('Y-m-d', strtotime($customer->added_at)) }}</td>
+              <td>{{ date('Y-m-d', strtotime($customer->finished_at)) }}</td>
+              <td>{{ $customer->price }}</td>
               <td>
-                <span class="fas fa-wrench red" aria-hidden="true"></span>
-                <span class="fas fa-coins green" aria-hidden="true"></span>
+                @if ($customer->ready)
+                <?php $wcolor = 'green'; ?>
+                {{-- @{{ $wcolor = 'green'}} --}}
+                @else
+                <?php $wcolor = 'red'; ?>
+                {{-- @{{ $wcolor = 'red'}} --}}
+                @endif
+                <span class="fas fa-wrench {{ $wcolor }}" aria-hidden="true"></span>
+
+                @if ($customer->paid)
+                <?php $pcolor = 'green'; ?>
+                @else
+                <?php $pcolor = 'red'; ?>
+                @endif
+                <span class="fas fa-coins {{ $pcolor }}" aria-hidden="true"></span>
               </td>
               <td>
-                <a href="#">
-                  <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editTask"><i
-                      class="far fa-edit"></i> Change
+                <a href="/edit/{{$customer->id}}">
+                  <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editTask">
+                    Change
                   </button>
                 </a>
               </td>
             </tr>
-            <tr>
-              <td>Kitas klientas</td>
-              <td>jhfgj987123</td>
-              <td>rtyey987123</td>
-              <td>ncnb987123</td>
-              <td>asd987123</td>
-              <td>2020-10-15</td>
-              <td>2020-11-01</td>
-              <td>15.00</td>
-              <td>
-                <span class="fas fa-wrench green" aria-hidden="true"></span>
-                <span class="fas fa-coins red" aria-hidden="true"></span>
-              </td>
-              <td>
-                <a href="#">
-                  <button class="btn btn-success"><i class="far fa-edit"></i> Change
-                  </button>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Sekantis</td>
-              <td>555123</td>
-              <td>asdf555123</td>
-              <td>fds555123</td>
-              <td>erty555123</td>
-              <td>2021-01-01</td>
-              <td>2021-02-28</td>
-              <td>30.00</td>
-              <td>
-                <span class="fas fa-wrench red" aria-hidden="true"></span>
-                <span class="fas fa-coins green" aria-hidden="true"></span>
-              </td>
-              <td>
-                <a href="#">
-                  <button class="btn btn-success"><i class="far fa-edit"></i> Change
-                  </button>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Nu dar vienas</td>
-              <td>wet123</td>
-              <td>dfg123</td>
-              <td>hgfhj123</td>
-              <td>hjf123</td>
-              <td>2021-02-28</td>
-              <td>2021-02-29</td>
-              <td>12.00</td>
-              <td>
-                <span class="fas fa-wrench red" aria-hidden="true"></span>
-                <span class="fas fa-coins red" aria-hidden="true"></span>
-              </td>
-              <td>
-                <a href="#">
-                  <button class="btn btn-success"><i class="far fa-edit"></i> Change
-                  </button>
-                </a>
-              </td>
-            </tr>
+            @endforeach
+
           </tbody>
         </table>
       </div>
@@ -279,7 +235,7 @@
   <script src="js/bootstrap.bundle.min.js"></script>
   <script>
     $(document).ready( function () {
-          $('#myTable').DataTable();
+          // $('#myTable').DataTable();
       } );
   </script>
 </body>

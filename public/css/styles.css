@@ -7,3 +7,6 @@
 .red {
   color: red;
 }
+#myTable thead th {
+  cursor: pointer;
+}
