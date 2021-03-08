@@ -24,16 +24,17 @@ class CustomersFactory extends Factory
         return [
             'name' => $this->faker->name,
             'tel_num' => $this->faker->phoneNumber,
-            'model' => $this->faker->company,
-            'todo' => $this->faker->text,
-            'comment' => $this->faker->text,
-            'added_at' => $this->faker->dateTime($max = 'now'),
+            'model' => $this->faker->randomElement($array = array ('Acer','Asus','Dell', 'HP', 'E-Machines', 'MAC', 'Acer')),
+            'todo' => $this->faker->text($maxNbChars = 50),
+            'comment' => $this->faker->text($maxNbChars = 50),
+            'added_at' => $this->faker->dateTimeBetween($startDate = '-10 months', $endDate = 'now', $timezone = null),
+            'finished_at' => $this->faker->dateTimeBetween($startDate = '-10 months', $endDate = 'now', $timezone = null),
             'price' => $this->faker->numberBetween($min = 10, $max = 120),
             'cost' => $this->faker->numberBetween($min = 0, $max = 30),
             'paid' => $this->faker->boolean,
             'ready' => $this->faker->boolean,
-            'created_at' => $this->faker->dateTime($max = 'now', $timezone = null),
-            'updated_at' => $this->faker->dateTime($max = 'now', $timezone = null),
+            'created_at' => $this->faker->dateTimeBetween($startDate = '-10 months', $endDate = 'now', $timezone = null),
+            'updated_at' => $this->faker->dateTimeBetween($startDate = '-10 months', $endDate = 'now', $timezone = null),
         ];
     }
 }

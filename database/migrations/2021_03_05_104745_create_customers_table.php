@@ -21,6 +21,7 @@ class CreateCustomersTable extends Migration
             $table->string('todo');
             $table->text('comment');
             $table->timestamp('added_at', $precision = 0)->useCurrent();
+            $table->timestamp('finished_at', $precision = 0)->nullable()->default(NULL);
             $table->float('price', 6, 2);
             $table->float('cost', 6, 2); //islaidos
             $table->boolean('paid')->default(false);

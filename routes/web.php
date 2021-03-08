@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CustomersController;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [CustomersController::class, 'index'])->name('customers.index');
+
+// Route::get('/time', function(){
+//     $current = new Carbon();
+//     // $current->timezone('Europe/London');
+//     echo $current->format('Y-m-d');
+// });
