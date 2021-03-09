@@ -17,6 +17,8 @@ use Carbon\Carbon;
 
 Route::get('/', [CustomersController::class, 'index'])->name('customers.index');
 
+Route::post('/add', [CustomersController::class, 'addCustomer'])->name('customer.add');
+
 // Route::get('/time', function(){
 //     $current = new Carbon();
 //     // $current->timezone('Europe/London');

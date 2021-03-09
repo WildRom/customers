@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="css/all.min.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/ju/dt-1.10.23/datatables.min.css" />
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"
+    rel="stylesheet" />
   <script src="js/jquery-3.6.0.min.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/v/ju/dt-1.10.23/datatables.min.js"></script>
   <title>@yield('title')</title>
@@ -55,7 +58,7 @@
             <th>Gaminys</th>
             <th>Atlikti</th>
             <th>Komentaras</th>
-            <th>Priimtas&nbsp;&nbsp;</th>
+            <th>Priimtas</th>
             <th>Atiduotas</th>
             <th>Kaina</th>
             <th>Būsena</th>
@@ -70,7 +73,13 @@
               <td>{{ $customer->todo }}</td>
               <td>{{ $customer->comment }}</td>
               <td>{{ date('Y-m-d', strtotime($customer->added_at)) }}</td>
+
+              @if ($customer->finished_at)
               <td>{{ date('Y-m-d', strtotime($customer->finished_at)) }}</td>
+              @else
+              <td>&nbsp;</td>
+              @endif
+
               <td>{{ $customer->price }}</td>
               <td>
                 @if ($customer->ready)
@@ -115,41 +124,36 @@
           <h5 class="modal-title" id="addWorkModalTitle">Modal title</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="" method="POST">
+        <form action="\add" method="POST" id="add">
           <div class="modal-body">
+            @csrf
             <div class="mb-2">
-              <label for="name" class="form-label">Customer name</label>
-              <input type="text" class="form-control" id="name" name="name">
+              {{-- <label for="name" class="form-label">Customer name</label> --}}
+              <input type="text" class="form-control" id="name" name="name" placeholder="Name">
             </div>
             <div class="mb-2">
-              <label for="phone" class="form-label">Phone Nr.</label>
-              <input type="text" class="form-control" id="phone" name="phone">
+              {{-- <label for="tel_num" class="form-label">Phone Nr.</label> --}}
+              <input type="text" class="form-control" id="tel_num" name="tel_num" placeholder="Phone">
             </div>
             <div class="mb-2">
-              <label for="model" class="form-label">Model</label>
-              <input type="text" class="form-control" id="model" name="model">
+              {{-- <label for="model" class="form-label">Model</label> --}}
+              <input type="text" class="form-control" id="model" name="model" placeholder="Model">
             </div>
             <div class="mb-2">
-              <label for="todo">To Do</label>
+              {{-- <label for="todo">To Do</label> --}}
               <textarea class="form-control" placeholder="What to do ..." id="todo" name="todo"></textarea>
             </div>
             <div class="mb-2">
-              <label for="comment">Comment</label>
+              {{-- <label for="comment">Comment</label> --}}
               <textarea class="form-control" placeholder="Comment ..." id="comment" name="comment"></textarea>
             </div>
             <div class="mb-2">
-              <label for="price" class="form-label">Price</label>
-              <input type="number" class="form-control" id="price" name="price">
+              {{-- <label for="price" class="form-label">Price</label> --}}
+              <input type="number" class="form-control" id="price" name="price" placeholder="Price">
             </div>
             <div class="mb-2">
               <label for="cost" class="form-label">Cost</label>
-              <input type="number" class="form-control" id="cost" name="cost">
-            </div>
-
-            <!-- ******* check box ****** -->
-            <div class="mb-2 form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <label class="form-check-label" for="exampleCheck1">Check me out</label>
+              <input type="number" class="form-control" id="cost" name="cost" value=0>
             </div>
           </div>
           <div class="modal-footer">
@@ -235,8 +239,67 @@
   <script src="js/bootstrap.bundle.min.js"></script>
   <script>
     $(document).ready( function () {
-          // $('#myTable').DataTable();
-      } );
+          $('#add').submit( function(e) {
+            e.preventDefault();
+
+            let name = $('#name').val();
+            let tel_num = $('#tel_num').val();
+            let model = $('#model').val();
+            let todo = $('#todo').val();
+            let comment = $('#comment').val();
+            let price = $('#price').val();
+            let cost = $('#cost').val();
+            let _token = $('input[name=_token]').val();
+
+            $.ajax({
+              url: "{{ route('customer.add') }}",
+              type: "POST",
+              data: {
+                name: name,
+                tel_num: tel_num,
+                model: model,
+                todo: todo,
+                comment: comment,
+                price: price,
+                cost: cost,
+                _token: _token
+              },
+              success: function(response) {
+                if(response) {
+                  let html = '';
+                  html += '<tr><td>';
+                  html += response.name;
+                  html += '</td><td>';
+                  html += response.tel_num;
+                  html += '</td><td>';
+                  html += response.model;
+                  html += '</td><td>';
+                  html += response.todo;
+                  html += '</td><td>';
+                  html += response.comment;
+                  html += '</td><td>';
+                  html += response.added_at;
+                  html += '</td><td>';
+                  html += response.finished_at;
+                  html += '</td><td>';
+                  html += response.price;
+                  html += '</td><td>';
+                  html += response.cost;
+                  html += '</td><td>';
+                  html += 'change';
+                  html += '</td></tr>';
+                  console.log(html);
+                  $('#myTable tbody').append(html);
+                  
+                  $('#add')[0].reset;
+                  $('#addWorkModal').modal('hide');
+                } else {
+                  alert('WRONG, NO RESPONSE!!!');
+                }
+              }
+            })            
+          });
+    });
   </script>
 </body>
 
